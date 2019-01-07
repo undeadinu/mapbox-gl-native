@@ -15,4 +15,4 @@ scripts/check_binary_size.js "platform/android/MapboxGLAndroidSDK/build/outputs/
 # Build source data for http://mapbox.github.io/mapbox-gl-native/metrics/binary-size/
 scripts/publish_binary_size.js
 # Log binary sizes to S3
-scripts/log_binary_metrics.js
+scripts/log_android_binary_metrics.js
