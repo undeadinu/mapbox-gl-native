@@ -28,6 +28,8 @@ var params = {
   Bucket: 'mapbox-loading-dock', 
   Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`
 };
+
+var s3 = new AWS.S3();
  
 s3.getObject(params, (err, data) => {
   if (err) {
