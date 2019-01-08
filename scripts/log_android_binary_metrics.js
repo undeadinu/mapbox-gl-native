@@ -22,36 +22,57 @@ const androidMetrics = binaries.map(binary => {
       'size' : fs.statSync(binary[2]).size,
       'created_at': `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`
   })
-}).join('\n') + '\n';
+}).join('\n');
 
-fs.appendFile('temp-metrics.json', androidMetrics, (err) => {
-  if (err) throw err;
-  console.log('Android metrics written to temporary file');
-});
+var params = {
+  Bucket: 'mapbox-loading-dock', 
+  Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`
+};
+ 
+s3.getObject(params, (err, data) => {
+  if (err) {
 
-fs.readFile('temp-metrics.json', (err, data) => {
-  if (err) throw err;
-
-  var payload = data.toString('utf8').trim()
-
-  var params = {
-      Body: zlib.gzipSync(payload),
-      Bucket: 'mapbox-loading-dock',
-      Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`,
-      CacheControl: 'max-age=300',
-      ContentType: 'application/json'
-  };
-  
-  return new AWS.S3({region: 'us-east-1'}).putObject(params, function (err, res) {
-    if (err) {
-      console.log("Error sending Android binary metrics to S3: ", err);
-    } else {
-      console.log("Android binary size logged to S3 successfully")
-      
-      fs.unlink('temp-metrics.json', (err) => {
-        if (err) throw err;
-        console.log('temp-metrics.json was deleted');
-      });
-    }
-  });
+    console.log(err);
+    console.log(JSON.stringify(err))
+    
+    var params = {
+        Body: zlib.gzipSync(androidMetrics),
+        Bucket: 'mapbox-loading-dock',
+        Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`,
+        CacheControl: 'max-age=300',
+        ContentType: 'application/json'
+    };
+    
+    return new AWS.S3({region: 'us-east-1'}).putObject(params, function (err, res) {
+      if (err) {
+        console.log("Error sending Android binary metrics to S3: ", err);
+      } else {
+        console.log("Android binary size logged to S3 successfully")
+      }
+    });
+    
+  } else {
+     // Read the data from the file
+     console.log(data)
+     
+     var iosMetrics = data.toString('utf8');
+     var updatedPayload = iosMetrics + '\n' androidMetrics
+     
+     // Append the new data to it and replace the existing object
+     var params = {
+         Body: zlib.gzipSync(updatedPayload),
+         Bucket: 'mapbox-loading-dock',
+         Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`,
+         CacheControl: 'max-age=300',
+         ContentType: 'application/json'
+     };
+     
+     return new AWS.S3({region: 'us-east-1'}).putObject(params, function (err, res) {
+       if (err) {
+         console.log("Error sending Android binary metrics to S3: ", err);
+       } else {
+         console.log("Android binary metrics appended to S3 successfully")
+       }
+     });
+  }
 });
