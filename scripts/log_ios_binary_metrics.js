@@ -55,7 +55,7 @@ s3.getObject(params, (err, data) => {
      console.log(data)
      
      var androidMetrics = data.toString('utf8');
-     var updatedPayload = androidMetrics + '\n' iosMetrics;
+     var updatedPayload = androidMetrics + '\n' + iosMetrics;
      
      // Append the new data to it and replace the existing object
      var params = {
