@@ -7,16 +7,16 @@ const AWS = require('aws-sdk');
 const date = new Date();
 
 const binaries = [
-  ["iOS", "universal", "build/ios/pkg/dynamic/Mapbox-stripped"],
-  ["iOS", "armv7", "build/ios/pkg/dynamic/Mapbox-stripped-armv7"],
-  ["iOS", "arm64", "build/ios/pkg/dynamic/Mapbox-stripped-arm64"],
-  ["iOS", "x86_64", "build/ios/pkg/dynamic/Mapbox-stripped-x86_64"]
+  ["universal", "build/ios/pkg/dynamic/Mapbox-stripped"],
+  ["armv7", "build/ios/pkg/dynamic/Mapbox-stripped-armv7"],
+  ["arm64", "build/ios/pkg/dynamic/Mapbox-stripped-arm64"],
+  ["x86_64", "build/ios/pkg/dynamic/Mapbox-stripped-x86_64"]
 ]
 
 const iosMetrics = binaries.map(binary => {
   return JSON.stringify({
       'sdk': 'maps',
-      'platform' : binary[0],
+      'platform' : 'iOS',
       'arch': binary[1],
       'size' : fs.statSync(binary[2]).size,
       'created_at': `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`
