@@ -152,7 +152,10 @@
                       "PolicyDocument": {
                         "Statement": [
                           {
-                            "Action": ["s3:PutObject"],
+                            "Action": [
+                              "s3:PutObject",
+                              "s3:GetObject"
+                            ],
                             "Effect": "Allow",
                             "Resource": ["arn:aws:s3:::mapbox-loading-dock/raw/mobile.binarysize/*",
                                        "arn:aws:s3:::mapbox-loading-dock/raw/mobile.codecoverage/*",
