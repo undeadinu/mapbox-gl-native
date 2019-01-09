@@ -36,19 +36,24 @@ var testParams = {
   Key: `raw/nadia_staging_test_v2/5d38def92486076d182c1450a4c4451575cd1e2f.json.gz`
 };
 
+console.log('📦 TEST PARAMS: ' + testParams);
+
 s3.getObject(testParams, (err, data) => {
   if (err) {
-    console.log('TEST GET FAILED:' + err);
+    console.log('❌ TEST GET FAILED:' + err);
   } else {
-    console.log('TEST GET PASSED:' + data.toString('utf8'));
+    console.log('✅ TEST GET PASSED:' + JSON.stringify(data.toString('utf8')));
   }
 });
+
+
+console.log('🅿️ ACTUAL PARAMS: ' + params);
 
 s3.getObject(params, (err, data) => {
   if (err) {
     // Try with known existing object
-    console.log('ERROR: ' + err);
-    console.log('PARAMS: ' + params)
+    console.log('👎 ACTUAL GET FAILED: ' + err);
+    console.log('👍 ACTUAL GET PASSED: ' + JSON.stringify(params))
     
     var params = {
         Body: zlib.gzipSync(androidMetrics),
