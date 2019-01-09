@@ -153,6 +153,7 @@
                         "Statement": [
                           {
                             "Action": [
+                              "s3:ListBucket",
                               "s3:PutObject",
                               "s3:GetObject",
                               "s3:GetObjectAcl"
@@ -162,8 +163,6 @@
                                        "arn:aws:s3:::mapbox-loading-dock/raw/mobile.codecoverage/*",
                                        "arn:aws:s3:::mapbox-loading-dock/raw/mobile_staging.binarysize/*",
                                        "arn:aws:s3:::mapbox-loading-dock/raw/mobile_tmp.binary_size/*",
-                                       "arn:aws:s3:::mapbox-loading-dock/raw/nadia_staging.binarysize/*",
-                                       "arn:aws:s3:::mapbox-loading-dock/raw/nadia_staging_test/*",
                                        "arn:aws:s3:::mapbox-loading-dock/raw/nadia_staging_test_v2/*"]
                           }
                         ]

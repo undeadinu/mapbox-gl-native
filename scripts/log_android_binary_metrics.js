@@ -31,16 +31,24 @@ var params = {
 
 var s3 = new AWS.S3();
 
-s3.getObjectAcl(params, function(err, data) {
-  if (err) console.log(err, err.stack); // an error occurred
-  else     console.log(data);           // successful response
+var testParams = {
+  Bucket: 'mapbox-loading-dock', 
+  Key: `raw/nadia_staging_test_v2/5d38def92486076d182c1450a4c4451575cd1e2f.json.gz`
+};
+
+s3.getObject(testParams, (err, data) => {
+  if (err) {
+    console.log('TEST GET FAILED:' + err);
+  } else {
+    console.log('TEST GET PASSED:' + data.toString('utf8'));
+  }
 });
- 
+
 s3.getObject(params, (err, data) => {
   if (err) {
-
-    console.log(err);
-    console.log(JSON.stringify(err))
+    // Try with known existing object
+    console.log('ERROR: ' + err);
+    console.log('PARAMS: ' + params)
     
     var params = {
         Body: zlib.gzipSync(androidMetrics),
