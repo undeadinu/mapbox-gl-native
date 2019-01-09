@@ -18,8 +18,8 @@ const androidMetrics = binaries.map(binary => {
   return JSON.stringify({
       'sdk': 'maps',
       'platform' : 'Android'
-      'arch': binary[1],
-      'size' : fs.statSync(binary[2]).size,
+      'arch': binary[0],
+      'size' : fs.statSync(binary[1]).size,
       'created_at': `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`
   })
 }).join('\n');
