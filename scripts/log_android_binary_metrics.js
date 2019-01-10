@@ -39,7 +39,7 @@ s3.getObject({
     console.log('ERROR OBJECT:')
     console.log(JSON.stringify(err));
     // Create new metrics object if it does not exist
-    if (err.includes('NoSuchKey')) {
+    if (err.statusCode == 404) {
       return new AWS.S3({region: 'us-east-1'}).putObject({
           Body: zlib.gzipSync(androidMetrics),
           Bucket: 'mapbox-loading-dock',
