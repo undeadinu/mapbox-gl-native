@@ -53,7 +53,6 @@ s3.getObject(params, (err, data) => {
   if (err) {
     // Try with known existing object
     console.log('👎 ACTUAL GET FAILED: ' + err);
-    console.log('👍 ACTUAL GET PASSED: ' + JSON.stringify(params))
     
     var params = {
         Body: zlib.gzipSync(androidMetrics),
