@@ -36,18 +36,18 @@ var testParams = {
   Key: `raw/nadia_staging_test_v2/5d38def92486076d182c1450a4c4451575cd1e2f.json.gz`
 };
 
-console.log('📦 TEST PARAMS: ' + testParams);
+console.log('📦 TEST PARAMS: ' + JSON.stringify(testParams);
 
 s3.getObject(testParams, (err, data) => {
   if (err) {
     console.log('❌ TEST GET FAILED:' + err);
   } else {
-    console.log('✅ TEST GET PASSED:' + JSON.stringify(data.toString('utf8')));
+    console.log('✅ TEST GET PASSED:' + data.Body.toString('utf-8'));
   }
 });
 
 
-console.log('🅿️ ACTUAL PARAMS: ' + params);
+console.log('🅿️ ACTUAL PARAMS: ' + JSON.stringify(params));
 
 s3.getObject(params, (err, data) => {
   if (err) {
