@@ -37,7 +37,7 @@ s3.getObject({
 }, (err, data) => {
   if (err) {
     console.log('ERROR OBJECT:')
-    console.log(JSON.stringify(error));
+    console.log(JSON.stringify(err));
     // Create new metrics object if it does not exist
     if (err.includes('NoSuchKey')) {
       return new AWS.S3({region: 'us-east-1'}).putObject({
