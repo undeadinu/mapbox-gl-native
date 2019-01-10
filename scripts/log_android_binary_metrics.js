@@ -36,7 +36,7 @@ var testParams = {
   Key: `raw/nadia_staging_test_v2/5d38def92486076d182c1450a4c4451575cd1e2f.json.gz`
 };
 
-console.log('📦 TEST PARAMS: ' + JSON.stringify(testParams);
+console.log('📦 TEST PARAMS: ' + JSON.stringify(testParams));
 
 s3.getObject(testParams, (err, data) => {
   if (err) {
