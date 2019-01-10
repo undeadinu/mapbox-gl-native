@@ -153,7 +153,6 @@
                         "Statement": [
                           {
                             "Action": [
-                              "s3:ListBucket",
                               "s3:PutObject",
                               "s3:GetObject",
                               "s3:GetObjectAcl"
@@ -168,6 +167,22 @@
                           }
                         ]
                       }
+                    },
+                    {
+                        "PolicyName": "list-loading-dock",
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "s3:ListBucket"
+                                    ],
+                                    "Resource": [
+                                        "arn:aws:s3:::mapbox-loading-dock"
+                                    ],
+                                    "Effect": "Allow"
+                                }
+                            ]
+                        }
                     },
                     {
                         "PolicyName": "cloudwatch-metrics",
