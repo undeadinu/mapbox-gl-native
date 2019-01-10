@@ -49,14 +49,14 @@ class MGLDocumentationExampleTests: XCTestCase, MGLMapViewDelegate {
     
     func testMGLLight() {
         //#-example-code
-        light = MGLLight()
-        let position = MGLSphericalPositionMake(5, 180, 80)
+        let light = MGLLight()
+        let position = MGLSphericalPosition(radial: 5, azimuthal: 180, polar: 80)
         light.position = NSExpression(forConstantValue: NSValue(mglSphericalPosition: position))
         light.anchor = NSExpression(forConstantValue: "map")
-        style.light = light
-        //#-example-code
-
-        XCTAssertNotNil(mapView.style?.light = light)
+        mapView.style?.light = light
+        //#-end-example-code
+        
+        XCTAssertNotNil(mapView.style?.light)
     }
     
     func testMGLShape$shapeWithData_encoding_error_() {
