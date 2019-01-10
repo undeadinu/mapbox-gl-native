@@ -34,9 +34,10 @@ s3.getObject({
   Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`
 }, (err, data) => {
   if (err) {
-    
+    console.log('ERROR OBJECT:')
+    console.log(JSON.stringify(console.error();))
     // Create new metrics object if it does not exist
-    if (err.includes('NoSuchKey')) {
+    if (err.message.includes('NoSuchKey')) {
       return new AWS.S3({region: 'us-east-1'}).putObject({
           Body: zlib.gzipSync(iosMetrics),
           Bucket: 'mapbox-loading-dock',
