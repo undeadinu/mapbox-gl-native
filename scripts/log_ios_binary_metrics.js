@@ -58,30 +58,29 @@ s3.getObject({
     
   } else {
      // Metrics already exist for this commit, so append additional data to it
-     var androidMetrics = data.Body.toString('utf-8')
-     console.log("📳 Android metrics - stringified:");
-     console.log(JSON.stringify(androidMetrics));
-     console.log("📳 Android metrics - unstringified:");
-     console.log(androidMetrics);
+     var androidMetrics = data.Body;
      
-     var updatedPayload = androidMetrics + '\n' + iosMetrics;
-     console.log("📦 Updated payload - stringified:");
-     console.log(JSON.stringify(updatedPayload));
-     console.log("📦 Updated payload - unstringified:");
-     console.log(updatedPayload);
-     
-     return new AWS.S3({region: 'us-east-1'}).putObject({
-         Body: zlib.gzipSync(updatedPayload),
-         Bucket: 'mapbox-loading-dock',
-         Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`,
-         CacheControl: 'max-age=300',
-         ContentType: 'application/json'
-     }, function (err, res) {
-       if (err) {
-         console.log("Error uploading iOS binary size metrics to existing metrics: ", err);
-       } else {
-         console.log("Successfully uploaded iOS binary size metrics to existing metrics:")
-       }
+     zlib.unzip(androidMetrics, (err, data) => {
+      if (err) throw err;
+      var updatedPayload = androidMetrics + '\n' + iosMetrics;
+      console.log("📦 Updated payload - stringified:");
+      console.log(JSON.stringify(data));
+      console.log("📦 Updated payload - unstringified:");
+      console.log(data);
+      
+      return new AWS.S3({region: 'us-east-1'}).putObject({
+          Body: zlib.gzipSync(updatedPayload),
+          Bucket: 'mapbox-loading-dock',
+          Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`,
+          CacheControl: 'max-age=300',
+          ContentType: 'application/json'
+      }, function (err, res) {
+        if (err) {
+          console.log("Error uploading iOS binary size metrics to existing metrics: ", err);
+        } else {
+          console.log("Successfully uploaded iOS binary size metrics to existing metrics:")
+        }
+      });
      });
   }
 });
