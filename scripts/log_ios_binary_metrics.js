@@ -25,6 +25,8 @@ const iosMetrics = binaries.map(binary => {
   })
 }).join('\n');
 
+console.log('Original ios metrics: ' + iosMetrics);
+
 // Since the CircleCI default workflow runs several jobs for multiple platforms 
 // on each commit, we need to check if binary size metrics for this commit
 // exist already to prevent existing metrics from being overridden.
@@ -34,8 +36,6 @@ s3.getObject({
   Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`
 }, (err, data) => {
   if (err) {
-    console.log('ERROR OBJECT:');
-    console.log(JSON.stringify(err));
     // Create new metrics object if it does not exist
     if (err.statusCode == 404) {
       return new AWS.S3({region: 'us-east-1'}).putObject({
@@ -69,7 +69,7 @@ s3.getObject({
       console.log(data);
       
       return new AWS.S3({region: 'us-east-1'}).putObject({
-          Body: zlib.gzipSync(updatedPayload),
+          Body: zlib.gzipSync(data),
           Bucket: 'mapbox-loading-dock',
           Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`,
           CacheControl: 'max-age=300',
