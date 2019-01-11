@@ -102,6 +102,28 @@ class MGLDocumentationExampleTests: XCTestCase, MGLMapViewDelegate {
         XCTAssertNotNil(region)
     }
     
+    func testMGLOfflinePack() {
+        let northeast = CLLocationCoordinate2D(latitude: 40.989329, longitude: -102.062592)
+        let southwest = CLLocationCoordinate2D(latitude: 36.986207, longitude: -109.049896)
+        let bbox = MGLCoordinateBounds(sw: southwest, ne: northeast)
+        let region = MGLTilePyramidOfflineRegion(styleURL: MGLStyle.lightStyleURL, bounds: bbox, fromZoomLevel: 11, toZoomLevel: 14)
+        let context = "Tile Pyramid Region".data(using: .utf8)
+        
+        //#-example-code
+        MGLOfflineStorage.shared.addPack(for: region, withContext: context!) { (pack, error) in
+            guard error == nil else {
+                // If download fails, log the error to the console
+                print("Error: \(error?.localizedDescription ?? "unknown error")")
+                return
+            }
+            
+            // Start an MGLOfflinePack download
+            pack!.resume()
+        }
+        //#-end-example-code
+        XCTAssertNotNil(region)
+    }
+    
     func testMGLShape$shapeWithData_encoding_error_() {
         let mainBundle = Bundle(for: MGLDocumentationExampleTests.self)
         
