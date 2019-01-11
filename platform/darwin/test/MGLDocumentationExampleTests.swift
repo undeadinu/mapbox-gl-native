@@ -59,6 +59,26 @@ class MGLDocumentationExampleTests: XCTestCase, MGLMapViewDelegate {
         XCTAssertNotNil(mapView.style?.light)
     }
     
+    func testMGLTilePyramidOfflineRegion() {
+        class MGLStyle {
+            static var lightStyleURL: URL {
+                return MGLDocumentationExampleTests.styleURL
+            }
+        }
+
+        //#-example-code
+        let northeast = CLLocationCoordinate2D(latitude: 40.989329, longitude: -102.062592)
+        let southwest = CLLocationCoordinate2D(latitude: 36.986207, longitude: -109.049896)
+        let bbox = MGLCoordinateBounds(sw: southwest, ne: northeast)
+
+        let region = MGLTilePyramidOfflineRegion(styleURL: MGLStyle.lightStyleURL, bounds: bbox, fromZoomLevel: 11, toZoomLevel: 14)
+        let context = "Tile Pyramid Region".data(using: .utf8)
+        MGLOfflineStorage.shared.addPack(for: region, withContext: context!)
+        //#-end-example-code
+
+        XCTAssertNotNil(region)
+    }
+    
     func testMGLShapeOfflineRegion() {
         class MGLStyle {
             static var lightStyleURL: URL {
