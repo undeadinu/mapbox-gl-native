@@ -60,7 +60,7 @@ s3.getObject({
     
   } else {
     // Metrics already exist for this commit, so append additional data to it
-    var iosMetrics = data.toString('utf-8')
+    var iosMetrics = data.Body.toString('utf-8')
     console.log("📳 iOS metrics - stringified:");
     console.log(JSON.stringify(iosMetrics));
     console.log("📳 iOS metrics - unstringified:");

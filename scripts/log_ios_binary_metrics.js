@@ -58,7 +58,7 @@ s3.getObject({
     
   } else {
      // Metrics already exist for this commit, so append additional data to it
-     var androidMetrics = data.toString('utf-8')
+     var androidMetrics = data.Body.toString('utf-8')
      console.log("📳 Android metrics - stringified:");
      console.log(JSON.stringify(androidMetrics));
      console.log("📳 Android metrics - unstringified:");
