@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
  To minimize the resources required by an irregularly shaped offline region,
  use the MGLShapeOfflineRegion class instead.
  
+ ### Example
+ ```swift
+ ```
+  
  #### Related examples
  See the <a href="https://www.mapbox.com/ios-sdk/maps/examples/offline-pack/">
  Download an offline map</a> example to learn how to define an offline region
