@@ -52,6 +52,11 @@ typedef NS_ENUM(NSUInteger, MGLAnnotationVerticalAlignment) {
  The mode used to track the user location on the map. Used with
  `MGLMapView.userTrackingMode`.
  
+ ### Example
+ ```swift
+ 
+ ```
+ 
  #### Related examples
  See the <a href="https://www.mapbox.com/ios-sdk/maps/examples/user-tracking-mode/">Switch between user tracking modes</a> example to learn how to toggle modes and how each mode behaves.
  */

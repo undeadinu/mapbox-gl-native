@@ -121,7 +121,24 @@ class MGLDocumentationExampleTests: XCTestCase, MGLMapViewDelegate {
             pack!.resume()
         }
         //#-end-example-code
+        
         XCTAssertNotNil(region)
+    }
+    
+    func testMGLUserTrackingMode() {
+        class view {
+            static var bounds: CGRect {
+                return CGRect(x: 0, y: 0, width: 256, height: 256)
+            }
+        }
+        
+        //#-example-code
+        let mapView = MGLMapView(frame: view.bounds)
+        mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        mapView.userTrackingMode = .followWithHeading
+        //#-end-example-code
+        
+        XCTAssertNotNil(mapView.userTrackingMode)
     }
     
     func testMGLShape$shapeWithData_encoding_error_() {
