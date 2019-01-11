@@ -60,7 +60,7 @@ s3.getObject({
     
   } else {
      // Metrics already exist for this commit, so append additional data to it
-     var iosMetrics = JSON.stringify(data.Body);
+     var iosMetrics = data.Body.toString('utf8');
 
      var updatedPayload = iosMetrics + '\n' + androidMetrics;
      
