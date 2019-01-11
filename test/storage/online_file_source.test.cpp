@@ -435,10 +435,15 @@ TEST(OnlineFileSource, TEST_REQUIRES_SERVER(LowHighPriorityRequests)) {
 
     fs.setMaximumConcurrentRequests(1);
 
-    NetworkStatus::Set(NetworkStatus::Status::Offline);
+    // requesting regular resource
+    Resource regular1{ Resource::Unknown, "http://127.0.0.1:3000/load/1" };
+    std::unique_ptr<AsyncRequest> req_1 = fs.request(regular1, [&](Response) {
+        response_counter++;
+        req_1.reset();
+    });
 
-    // requesting a low priority resource
-    Resource low_prio{ Resource::Unknown, "http://127.0.0.1:3000/load/1" };
+    // Low priority request that will be queued with regular ones.
+    Resource low_prio{ Resource::Unknown, "http://127.0.0.1:3000/load/2" };
     low_prio.setPriority(Resource::Priority::Low);
     std::unique_ptr<AsyncRequest> req_0 = fs.request(low_prio, [&](Response) {
         response_counter++;
@@ -447,19 +452,12 @@ TEST(OnlineFileSource, TEST_REQUIRES_SERVER(LowHighPriorityRequests)) {
         loop.stop();
     });
 
-    // requesting two "regular" resources
-    Resource regular1{ Resource::Unknown, "http://127.0.0.1:3000/load/2" };
-    std::unique_ptr<AsyncRequest> req_1 = fs.request(regular1, [&](Response) {
-        response_counter++;
-        req_1.reset();
-    });
+    // Request that should be scheduled before low priority one.
     Resource regular2{ Resource::Unknown, "http://127.0.0.1:3000/load/3" };
     std::unique_ptr<AsyncRequest> req_2 = fs.request(regular2, [&](Response) {
         response_counter++;
         req_2.reset();
     });
-
-    NetworkStatus::Set(NetworkStatus::Status::Online);
 
     loop.run();
 }
