@@ -79,7 +79,7 @@ class MGLDocumentationExampleTests: XCTestCase, MGLMapViewDelegate {
         MGLOfflineStorage.shared.addPack(for: region, withContext: context!)
         //#-end-example-code
         
-        XCTAssertNotNil(MGLOfflineStorage.shared.packs)
+        XCTAssertNotNil(region)
     }
     
     func testMGLShape$shapeWithData_encoding_error_() {
