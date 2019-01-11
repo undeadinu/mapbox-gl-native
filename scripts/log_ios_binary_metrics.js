@@ -58,11 +58,16 @@ s3.getObject({
     
   } else {
      // Metrics already exist for this commit, so append additional data to it
-     var androidMetrics = JSON.stringify(data.Body);
-     console.log("📳 Android metrics:");
+     var androidMetrics = data.toString('utf-8')
+     console.log("📳 Android metrics - stringified:");
+     console.log(JSON.stringify(androidMetrics));
+     console.log("📳 Android metrics - unstringified:");
      console.log(androidMetrics);
+     
      var updatedPayload = androidMetrics + '\n' + iosMetrics;
-     console.log("📦 Updated payload:");
+     console.log("📦 Updated payload - stringified:");
+     console.log(JSON.stringify(updatedPayload));
+     console.log("📦 Updated payload - unstringified:");
      console.log(updatedPayload);
      
      return new AWS.S3({region: 'us-east-1'}).putObject({

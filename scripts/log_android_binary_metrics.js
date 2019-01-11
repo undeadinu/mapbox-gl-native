@@ -59,13 +59,18 @@ s3.getObject({
     }
     
   } else {
-     // Metrics already exist for this commit, so append additional data to it
-     var iosMetrics = JSON.stringify(data.Body);
-     console.log("📳 iOS metrics:");
-     console.log(iosMetrics);
-     var updatedPayload = iosMetrics + '\n' + androidMetrics;
-     console.log("📦 Updated payload:");
-     console.log(JSON.stringify(updatedPayload));
+    // Metrics already exist for this commit, so append additional data to it
+    var iosMetrics = data.toString('utf-8')
+    console.log("📳 iOS metrics - stringified:");
+    console.log(JSON.stringify(iosMetrics));
+    console.log("📳 iOS metrics - unstringified:");
+    console.log(iosMetrics);
+    
+    var updatedPayload = iosMetrics + '\n' + androidMetrics;
+    console.log("📦 Updated payload - stringified:");
+    console.log(JSON.stringify(updatedPayload));
+    console.log("📦 Updated payload - unstringified:");
+    console.log(updatedPayload);
      
      return new AWS.S3({region: 'us-east-1'}).putObject({
          Body: zlib.gzipSync(updatedPayload),
