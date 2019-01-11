@@ -59,8 +59,9 @@ s3.getObject({
   } else {
      // Metrics already exist for this commit, so append additional data to it
      var androidMetrics = data.Body.toString('utf8');
-
+     console.log(JSON.stringify(androidMetrics))
      var updatedPayload = androidMetrics + '\n' + iosMetrics;
+     console.log(JSON.stringify(updatedPayload));
      
      return new AWS.S3({region: 'us-east-1'}).putObject({
          Body: zlib.gzipSync(updatedPayload),
