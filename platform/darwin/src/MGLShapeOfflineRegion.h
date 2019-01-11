@@ -10,6 +10,10 @@ NS_ASSUME_NONNULL_BEGIN
  An offline region defined by a style URL, geographic shape, and
  range of zoom levels.
  
+ ### Example
+ ```swift
+ ```
+ 
  This class requires fewer resources than MGLTilePyramidOfflineRegion
  for irregularly shaped regions.
  */
