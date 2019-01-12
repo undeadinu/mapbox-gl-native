@@ -27,8 +27,6 @@ const androidMetrics = binaries.map(binary => {
   })
 }).join('\n');
 
-console.log('Original android metrics: ' + androidMetrics);
-
 // Since the CircleCI default workflow runs several jobs for multiple platforms 
 // on each commit, we need to check if binary size metrics for this commit
 // exist already to prevent existing metrics from being overridden.
@@ -36,49 +34,46 @@ console.log('Original android metrics: ' + androidMetrics);
 s3.getObject({
   Bucket: 'mapbox-loading-dock', 
   Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`
-}, (err, data) => {
-  if (err) {
+}, (getObjectError, iosData) => {
+  if (getObjectError) {
     // Create new metrics object if it does not exist
-    if (err.statusCode == 404) {
+    if (getObjectError.statusCode == 404) {
       return new AWS.S3({region: 'us-east-1'}).putObject({
           Body: zlib.gzipSync(androidMetrics),
           Bucket: 'mapbox-loading-dock',
           Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`,
           CacheControl: 'max-age=300',
           ContentType: 'application/json'
-      }, function (err, res) {
-        if (err) {
-          console.log("Error uploading new binary size metrics: ", err);
+      }, function (putObjectError, res) {
+        if (putObjectError) {
+          console.log("Error uploading new binary size metrics: ", putObjectError);
         } else {
           console.log("Successfully uploaded new binary size metrics");
         }
       });
 
     } else {
-      console.log('Unknown error checking for existing metrics in S3: ' + err);
+      console.log('Unknown error checking for existing metrics in S3: ' + getObjectError);
     }
-    
+  // Metrics already exist for this commit, so append additional data to it  
   } else {
-    // Metrics already exist for this commit, so append additional data to it
-    var iosMetrics = data.Body;
-    
-    zlib.unzip(iosMetrics, (err, data) => {
-     if (err) throw err;
-     var updatedPayload = iosMetrics + '\n' + androidMetrics;
-     console.log("📦 Updated payload - stringified:");
-     console.log(JSON.stringify(data));
-     console.log("📦 Updated payload - unstringified:");
-     console.log(data);
+    zlib.unzip(iosMetrics, (unzipError, data) => {
+     if (unzipError) throw unzipError;
+     
+     var iosMetrics = data.Body.toString();
+     var updatedMetrics = iosMetrics + '\n' + androidMetrics;
+     console.log('data.Body.toString(): \n' + iosMetrics);
+     console.log('updatedMetrics: \n' + updatedMetrics);
       
       return new AWS.S3({region: 'us-east-1'}).putObject({
-          Body: zlib.gzipSync(data),
+          Body: zlib.gzipSync(updatedMetrics),
           Bucket: 'mapbox-loading-dock',
           Key: `raw/nadia_staging_test_v2/${process.env['CIRCLE_SHA1']}.json.gz`,
           CacheControl: 'max-age=300',
           ContentType: 'application/json'
-      }, function (err, res) {
-        if (err) {
-          console.log("Error uploading Android binary size metrics to existing metrics: ", err);
+      }, function (putObjectError, res) {
+        if (putObjectError) {
+          console.log("Error uploading Android binary size metrics to existing metrics: ", putObjectError);
         } else {
           console.log("Successfully uploaded Android binary size metrics to existing metrics:")
         }
